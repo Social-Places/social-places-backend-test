@@ -5,7 +5,6 @@ namespace App\ViewModels;
 use App\Classes\Column;
 use App\Classes\Filter;
 use App\Entity\Store;
-use App\Entity\User;
 use App\Enums\StoreStatus;
 use App\ViewModels\Options\QueryOptions;
 use Doctrine\ORM\QueryBuilder;
@@ -17,7 +16,7 @@ class StoreViewModel extends BaseTableViewModel
     public const RELATING_ENTITY = Store::class;
 
     public function hasAccess(?array $options = []): bool {
-        return $this->security->isGranted('ROLE_ADMIN');
+        return true;
     }
 
     public function getFilters(?array $options = [], $filterOptions = null): array {

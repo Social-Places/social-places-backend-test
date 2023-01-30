@@ -13,7 +13,6 @@ use App\Services\FileUploadService;
 use App\Services\ImportService;
 use App\Services\StoreService;
 use App\ViewModels\StoreViewModel;
-use App\ViewModels\UserViewModel;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -187,5 +186,88 @@ class StoreController extends BaseVueController
         $exportService->applyAutoWidth(1);
         $document = $exportService->generateDocument();
         return ExportService::generateResponse($document, 'Export');
+    }
+
+    private function extractImportExportAttributeInformation(): array {
+        $concernedClass = Store::class;
+
+        $reflectionClass = new ReflectionClass($concernedClass);
+        $properties = $reflectionClass->getProperties();
+        $storeMetadata = $this->entityManager->getClassMetadata(Store::class);
+
+        $extractedProperties = [];
+        foreach ($properties as $property) {
+            $importExportAttributes = $property->getAttributes(ImportExportAttribute::class);
+            if (count($importExportAttributes) !== 1) {
+                continue;
+            }
+            /** @var ImportExportAttribute $importExportAttribute */
+            $importExportAttribute = reset($importExportAttributes)->newInstance();
+            $columnName = $importExportAttribute->getColumnName();
+            $propertyName = $property->getName();
+            if ($columnName === null) {
+                $columnName = sp_string_normalize_camel_snake_kebab_to_words($propertyName);
+            }
+
+            $getterFunction = $importExportAttribute->getGetter();
+            if ($getterFunction === null) {
+                $getterFunction = sp_getter($propertyName);
+            }
+            if ($getterFunction !== null && !method_exists($concernedClass, $getterFunction)) {
+                throw new \RuntimeException('Method ' . $getterFunction . ' does not exist on ' . $concernedClass);
+            }
+            $getterReflectionMethod = new \ReflectionMethod($concernedClass, $getterFunction);
+            $exportProcessor = null;
+            if ($getterReflectionMethod->getReturnType()?->getName() === 'bool') {
+                $exportProcessor = static function (?bool $value) {
+                    return match($value) {
+                        null => '',
+                        false => 'No',
+                        true => 'Yes',
+                    };
+                };
+            }
+
+            $setterFunction = $importExportAttribute->getSetter();
+            if ($setterFunction === null) {
+                $setterFunction = sp_setter($propertyName);
+            } elseif (!method_exists($concernedClass, $setterFunction)) {
+                throw new \RuntimeException('Method ' . $setterFunction . ' does not exist on ' . $concernedClass);
+            }
+            $setterReflectionMethod = new \ReflectionMethod($concernedClass, $setterFunction);
+            $importProcessor = null;
+            $setterParameter = $setterReflectionMethod->getParameters()[0];
+            if ($setterParameter->getType()?->getName() === 'bool') {
+                $allowsNulls = $setterParameter->getType()?->allowsNull() ?? false;
+                $importProcessor = static function ($mixed, ?string $value) use ($allowsNulls) {
+                    return match(strtolower($value ?? '')) {
+                        '' => $allowsNulls ? null : false,
+                        'no' => false,
+                        'yes' => true,
+                    };
+                };
+            }
+            if (!empty($importProcessors = $property->getAttributes(ImportProcessorAttribute::class))) {
+                /** @var ImportProcessorAttribute $importProcessor */
+                $importProcessorAttr = reset($importProcessors)->newInstance();
+                $importProcessor = static function (self $_this, mixed $value) use ($importProcessorAttr): mixed {
+                    if ($importProcessorAttr->getService()) {
+                        return $_this->{$importProcessorAttr->getService()}->{$importProcessorAttr->getFunction()}($value);
+                    }
+                    return $_this->{$importProcessorAttr->getFunction()}($value);
+                };
+            }
+
+            $dbColumnName = array_flip($storeMetadata->fieldNames)[$propertyName] ?? null;
+            if ($dbColumnName === null) {
+                $array = array_values($storeMetadata->associationMappings[$propertyName]['joinColumnFieldNames'] ?? []);
+                $dbColumnName = reset($array);
+            }
+
+            $isIdentifier = $importExportAttribute->getIsIdentifierField();
+
+            $extractedProperties[] = compact('columnName', 'propertyName', 'getterFunction', 'setterFunction', 'dbColumnName', 'isIdentifier', 'exportProcessor','importProcessor');
+        }
+        return $extractedProperties;
     }
 }

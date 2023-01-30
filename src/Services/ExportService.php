@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Constants\PhpSpreadsheetConstants;
-use App\Entity\User;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Exception;
@@ -65,8 +64,8 @@ class ExportService
         return $this;
     }
 
-    public function setDefaultSheetProperties(string $exportName, ?User $user = null): self {
-        $name = $user?->getFullname() ?? 'System';
+    public function setDefaultSheetProperties(string $exportName): self {
+        $name = 'System';
         return $this->setSheetProperties(
             [
                 self::CREATOR => $name,

@@ -2,7 +2,6 @@
 
 namespace App\ViewModels;
 
-use App\Entity\User;
 use App\Services\EntityManager;
 use App\ViewModels\Options\QueryOptions;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,20 +19,17 @@ abstract class BaseTableViewModel
     protected EntityManagerInterface|EntityManager $entityManager;
     protected RouterInterface $router;
     protected Security $security;
-    protected ?User $user;
     private string $class;
 
     /**
      * @param EntityManagerInterface $entityManager
      * @param RouterInterface $router
      * @param Security $security
-     * @param User|null $user
      */
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router, Security $security, ?User $user) {
+    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router, Security $security) {
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->security = $security;
-        $this->user = $user;
         $this->class = get_class($this);
         if ($this->class::ALIAS === '' || $this->class::SESSION === '' || $this->class::RELATING_ENTITY === '') {
             throw new \RuntimeException('Please override ALIAS or SESSION or RELATING_ENTITY');
