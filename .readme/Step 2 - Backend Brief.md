@@ -13,4 +13,14 @@
 2. Implement a unit test for the `index` function of the `ContactController.php`, validating the information that is returned.
 3. For those applying for senior roles or otherwise seeking a challenge, complete the `import` function of the `StoreController.php` together with the `store-import.xlsx`
 
-[Step 3](./Step%203%20-%20Completion.md)
+[Step 3 - Completion](./Step%203%20-%20Completion.md)
+
+### Testing
+#### Docker
+To run the tests required please using Docker, connect to the Docker container using `docker compose exec application bash` or 
+`docker-compose exec application bash` in the project directory this will load you into the Docker environment. 
+
+Once loaded into the Docker environment, run `php bin\phpunit` to run the tests
+
+#### Native
+If you have chosen to not use docker, you can run the tests simply by being in the project directory and running `php bin\phpunit`.

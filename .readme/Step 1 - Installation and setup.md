@@ -11,14 +11,18 @@ Here we outline how to get your application up and running as well as provide an
     alternative ways of getting the code to work, at this time, Docker is primarily supported - this is included in our "test"
     as it is a required skill. We provide an alternative as not all CPU's and versions of windows are supported with Docker.
     2. Install Docker Desktop - this should install Docker Compose as well as all the necessary Docker runtimes.
-    3. Within the cloned project directory run `docker compose up` (if `docker compose` is not found, please try `docker-compose`).
+    3. Within the cloned project directory run `docker compose up` (if `docker compose up` is not found, please try `docker-compose up`).
     4. Your application should now initialize itself, setting up all the necessary directories and internally run `composer install` 
     for all the necessary packages.
-4. The application should now be served on [localhost](http://localhost)
-5. The backend portion of the test is strictly API based, as such a tool like [Postman](https://postman.com) or [Insomnia](https://insomnia.rest) is required
+4. Alternatively, use the [Symfony CLI](https://symfony.com/download) (we do not recommend this approach)
+   1. Download and install Symfony CLI tool (assuming you have PHP 8.1 and composer already installed and running)
+   2. You will then need to run `composer install` to install all the necessary packages
+   3. To start the application run `symfony server:start`
+5. The application should now be served on [localhost](http://localhost)
+6. The backend portion of the test is strictly API based, as such a tool like [Postman](https://postman.com) or [Insomnia](https://insomnia.rest) is required
 
 
-[Step 2](./Step%202%20-%20Backend%20Brief.md)
+[Step 2 - Backend Brief](./Step%202%20-%20Backend%20Brief.md)
 
 ### Troubleshooting
 1. `docker compose` not found: try `docker-compose` instead

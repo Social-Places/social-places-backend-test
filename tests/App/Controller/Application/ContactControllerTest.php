@@ -38,7 +38,7 @@ class ContactControllerTest extends WebTestCase
         $this->cleanTableOfTestRecord();
 
         // Create record
-        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $this->data);
+        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $this->data, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -59,7 +59,7 @@ class ContactControllerTest extends WebTestCase
         $newData['email'] = 'user';
         $newData['newsletter'] = null;
 
-        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $newData);
+        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $newData, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsUnprocessable();
         self::assertResponseFormatSame('json');
 
@@ -89,7 +89,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('GET', "/api/contacts/{$id}");
+        $this->client->request('GET', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -101,7 +101,7 @@ class ContactControllerTest extends WebTestCase
 
     public function testUnsuccessfulReadContact(): void {
         $id = 'random-str';
-        $this->client->request('GET', "/api/contacts/{$id}");
+        $this->client->request('GET', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseStatusCodeSame(404);
         self::assertResponseFormatSame('json');
     }
@@ -136,7 +136,7 @@ class ContactControllerTest extends WebTestCase
             $dataToSend = $newData;
         }
 
-        $this->client->request('PUT', "/api/contacts/{$id}", $dataToSend);
+        $this->client->request('PUT', "/api/contacts/{$id}", $dataToSend, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -169,7 +169,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('PUT', "/api/contacts/{$id}", ['email' => 'fail']);
+        $this->client->request('PUT', "/api/contacts/{$id}", ['email' => 'fail'], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsUnprocessable();
         self::assertResponseFormatSame('json');
 
@@ -179,7 +179,7 @@ class ContactControllerTest extends WebTestCase
 
 
         $id = 'random-id';
-        $this->client->request('PUT', "/api/contacts/{$id}", $this->data);
+        $this->client->request('PUT', "/api/contacts/{$id}", $this->data, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseStatusCodeSame(404);
 
         $this->cleanTableOfTestRecord();
@@ -204,7 +204,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('DELETE', "/api/contacts/{$id}");
+        $this->client->request('DELETE', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -234,7 +234,7 @@ class ContactControllerTest extends WebTestCase
 
         $id = 'random-id';
 
-        $this->client->request('DELETE', "/api/contacts/{$id}");
+        $this->client->request('DELETE', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         self::assertResponseStatusCodeSame(404);
         self::assertResponseFormatSame('json');
 
