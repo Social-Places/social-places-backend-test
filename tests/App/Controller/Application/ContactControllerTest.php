@@ -24,21 +24,21 @@ class ContactControllerTest extends WebTestCase
 
     protected function setUp(): void {
         parent::setUp();
-        $this->client = static::createClient();
+        $this->client = static::createClient([], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
         $this->entityManager = self::getContainer()->get(EntityManagerInterface::class);
         $this->data = $this->generateRandomData();
     }
 
     public function testSuccessfulIndex(): void {
-        // TODO: Test the index function of the ContactController is callable using GET and POST, returns data in the correct structure and is filterable when posting "filter"
-        // TODO: See ContactViewModel::getFilters for a brief idea of filters available and what to test
+        // TODO: Test the index function of the ContactController is callable using GET and POST, returns data in the correct structure and is filterable when posting "filters" JSON object with the form-data
+        /** @see ContactViewModel::getFilters for a brief idea of filters available and what to test */
     }
 
     public function testSuccessfulCreateContact(): void {
         $this->cleanTableOfTestRecord();
 
         // Create record
-        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $this->data, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $this->data);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -59,7 +59,7 @@ class ContactControllerTest extends WebTestCase
         $newData['email'] = 'user';
         $newData['newsletter'] = null;
 
-        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $newData, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->xmlHttpRequest('POST', '/api/contacts/create', $newData);
         self::assertResponseIsUnprocessable();
         self::assertResponseFormatSame('json');
 
@@ -89,7 +89,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('GET', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', "/api/contacts/{$id}");
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -101,7 +101,7 @@ class ContactControllerTest extends WebTestCase
 
     public function testUnsuccessfulReadContact(): void {
         $id = 'random-str';
-        $this->client->request('GET', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('GET', "/api/contacts/{$id}");
         self::assertResponseStatusCodeSame(404);
         self::assertResponseFormatSame('json');
     }
@@ -136,7 +136,7 @@ class ContactControllerTest extends WebTestCase
             $dataToSend = $newData;
         }
 
-        $this->client->request('PUT', "/api/contacts/{$id}", $dataToSend, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('PUT', "/api/contacts/{$id}", $dataToSend);
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -169,7 +169,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('PUT', "/api/contacts/{$id}", ['email' => 'fail'], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('PUT', "/api/contacts/{$id}", ['email' => 'fail']);
         self::assertResponseIsUnprocessable();
         self::assertResponseFormatSame('json');
 
@@ -179,7 +179,7 @@ class ContactControllerTest extends WebTestCase
 
 
         $id = 'random-id';
-        $this->client->request('PUT', "/api/contacts/{$id}", $this->data, [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('PUT', "/api/contacts/{$id}", $this->data);
         self::assertResponseStatusCodeSame(404);
 
         $this->cleanTableOfTestRecord();
@@ -204,7 +204,7 @@ class ContactControllerTest extends WebTestCase
         $this->entityManager->refresh($contact);
         $id = $contact->getId();
 
-        $this->client->request('DELETE', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('DELETE', "/api/contacts/{$id}");
         self::assertResponseIsSuccessful();
         self::assertResponseFormatSame('json');
 
@@ -234,7 +234,7 @@ class ContactControllerTest extends WebTestCase
 
         $id = 'random-id';
 
-        $this->client->request('DELETE', "/api/contacts/{$id}", [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json']);
+        $this->client->request('DELETE', "/api/contacts/{$id}");
         self::assertResponseStatusCodeSame(404);
         self::assertResponseFormatSame('json');
 

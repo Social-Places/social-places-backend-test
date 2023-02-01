@@ -3,6 +3,9 @@
 Here we outline how to get your application up and running as well as provide any insight that you might need.
 
 1. Fork the repository to your own account
+    1. Please ensure your repository is private and that you, once complete, invite [Orestes Sebele/orestes-za](orestes@socialplaces.io) and [James Filmer/socialPJames](james@socialplaces.io) as collaborators
+    2. Your assessment should be in separate branches to main/master
+    3. Use branches and create individual pull requests for each task. This makes it easier to review the code changes later
 2. Clone the forked repository using your preferred git client
    1. While it is not imperative that a git client such as [GitHub Desktop](https://desktop.github.com) or [Fork](https://git-fork.com/) is used we highly,
       highly recommend it.

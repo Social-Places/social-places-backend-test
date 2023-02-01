@@ -17,10 +17,8 @@
 
 ### Testing
 #### Docker
-To run the tests required please using Docker, connect to the Docker container using `docker compose exec application bash` or 
-`docker-compose exec application bash` in the project directory this will load you into the Docker environment. 
-
-Once loaded into the Docker environment, run `php bin\phpunit` to run the tests
+To run the tests required using Docker, connect to the Docker container and run the tests using `docker compose exec application php bin\phpunit` (or 
+`docker-compose exec application php bin\phpunit`) in the project directory. 
 
 #### Native
 If you have chosen to not use docker, you can run the tests simply by being in the project directory and running `php bin\phpunit`.
