@@ -1,14 +1,14 @@
-# Social Places
+# Social Places Backend Assessment
 ## Step 1 - Installation and setup
 Here we outline how to get your application up and running as well as provide any insight that you might need.
 
 1. Fork the repository to your own account
-    1. Please ensure your repository is private and that you, once complete, invite [Orestes Sebele/orestes-za](orestes@socialplaces.io) and [James Filmer/socialPJames](james@socialplaces.io) as collaborators
-    2. Your assessment should be in separate branches to main/master
-    3. Use branches and create individual pull requests for each task. This makes it easier to review the code changes later
+   1. Please ensure your repository is private and that you, once complete, invite [Orestes Sebele/orestes-za](orestes@socialplaces.io) and [James Filmer/socialPJames](james@socialplaces.io) as collaborators 
+   2. Your assessment should be in separate branches to main/master
+   3. Use branches and create individual pull requests for each task. This makes it easier to review the code changes later
 2. Clone the forked repository using your preferred git client
-   1. While it is not imperative that a git client such as [GitHub Desktop](https://desktop.github.com) or [Fork](https://git-fork.com/) is used we highly,
-      highly recommend it.
+   1. While it is not imperative that a git client such as [GitHub Desktop](https://desktop.github.com) or [Fork](https://git-fork.com/) is used, 
+we highly recommend it.
 3. Using [Docker](https://www.docker.com/get-started/) spin up your application
     1. We use docker as our primary tool for running our application in house and during development. While there are
     alternative ways of getting the code to work, at this time, Docker is primarily supported - this is included in our "test"
@@ -24,10 +24,8 @@ Here we outline how to get your application up and running as well as provide an
 5. The application should now be served on [localhost](http://localhost)
 6. The backend portion of the test is strictly API based, as such a tool like [Postman](https://postman.com) or [Insomnia](https://insomnia.rest) is required
 
-
-[Step 2 - Backend Brief](./Step%202%20-%20Backend%20Brief.md)
-
-### Troubleshooting
+## Troubleshooting
 1. `docker compose` not found: try `docker-compose` instead
 2. If you have issues with the port already in use. Feel free to change line 20 in the `docker-compose.yml` file to be something like `80:81`
-    
+
+[Step 2 - Backend Brief](./Step%202%20-%20Backend%20Brief.md)
