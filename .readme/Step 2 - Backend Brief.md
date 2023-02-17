@@ -1,4 +1,4 @@
-# Social Places
+# Social Places Backend Assessment
 ## Step 2 - Backend Brief
 ### What to do?
 1. Create, Read, Update and Delete (CRUD) via API
@@ -13,8 +13,6 @@
 2. Implement a unit test for the `index` function of the `ContactController.php`, validating the information that is returned.
 3. For those applying for senior roles or otherwise seeking a challenge, complete the `import` function of the `StoreController.php` together with the `store-import.xlsx`
 
-[Step 3 - Completion](./Step%203%20-%20Completion.md)
-
 ### Testing
 #### Docker
 To run the tests required using Docker, connect to the Docker container and run the tests using `docker compose exec application php bin\phpunit` (or 
@@ -22,3 +20,5 @@ To run the tests required using Docker, connect to the Docker container and run 
 
 #### Native
 If you have chosen to not use docker, you can run the tests simply by being in the project directory and running `php bin\phpunit`.
+
+[Step 3 - Completion](./Step%203%20-%20Completion.md)
